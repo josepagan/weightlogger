@@ -39,7 +39,8 @@ router.post('/', async (req, res) => {
   //the id returned by .save()
   let newWeight = new Weight({ weight: req.body.weight });
   newWeight = await newWeight.save();
-  res.send(newWeight);
+  const weights = await Weight.find().lean();
+  res.send(weights);
 });
 
 
