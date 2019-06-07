@@ -1,7 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const weight = require('./routes/weight');
+const weight = require('./routes/weights');
 
 const app = express();
 
@@ -11,9 +11,9 @@ mongoose.connect('mongodb://localhost/weightlogger')
   .catch(() => { console.error('Could not connect to mongodb'); });
 
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
-app.use('/api/weight', weight);
+app.use('/api/weights', weight);
 
 app.get('/', (req, res) => {
   res.send('Welcome to weightlogger');
