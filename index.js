@@ -2,7 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const weight = require('./routes/weights');
-const customers = require('./routes/customers');
+const users = require('./routes/users');
 
 
 const app = express();
@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost/weightlogger')
 app.use(cors());
 app.use(express.json());
 app.use('/api/weights', weight);
-app.use('/api/customers', customers);
+app.use('/api/users', users);
 
 app.get('/', (req, res) => {
   res.send('Welcome to weightlogger');

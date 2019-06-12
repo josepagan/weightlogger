@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const { weightSchema } = require('../models/weight');
 
-function validateCustomer(body) {
+function validateUser(body) {
   const schema = {
     name: Joi.string().min(3).max(255).required(),
     email: Joi.string().email().required(),
@@ -13,7 +13,7 @@ function validateCustomer(body) {
   return Joi.validate(body, schema);
 }
 
-const customerSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -38,7 +38,7 @@ const customerSchema = new mongoose.Schema({
   weights: [weightSchema],
 });
 
-const Customer = mongoose.model('Customer', customerSchema);
+const User = mongoose.model('User', userSchema);
 
-module.exports.Customer = Customer;
-module.exports.validateCustomer = validateCustomer;
+module.exports.User = User;
+module.exports.validateUser = validateUser;
