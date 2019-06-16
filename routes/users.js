@@ -19,10 +19,14 @@ router.get('/me', auth, async (req, res) => {
   const user = await User.findById(req.user._id);
   res.send(user);
 });
-router.get('/', async (req, res) => {
-  const users = await User.find().lean();
-  res.send(users);
+
+router.get('/weights', auth, async (req, res) => {
+
+  const user = await User.findById(req.user._id);
+  res.send(user);
 });
+
+
 
 router.post('/', async (req, res) => {
   // add validation joi here

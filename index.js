@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const weight = require('./routes/weights');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/weights', weight);
 app.use('/api/users', users);
+app.use('/api/auth', auth);
 
 app.get('/', (req, res) => {
   res.send('Welcome to weightlogger');
