@@ -21,14 +21,28 @@ router.get('/me', auth, async (req, res) => {
 });
 
 router.get('/weights', auth, async (req, res) => {
-
   const user = await User.findById(req.user._id);
-  res.send(user);
+  res.send(user.weights);
 });
 
 
+router.post('/weights', auth, async (req, res) => {
+  console.log('res', res);
+  // const { error } = validateWeight(req.body);
+  // if (error) return res.status(400).send(error.details[0].message);
 
-router.post('/', async (req, res) => {
+  // we use variable first to define and save objet, then we store
+  // the id returned by .save()
+  const user = await User.findById(req.user._id);
+  const newWeight = new Weight({ weight: req.body.weight });
+  user.weights.push(newWeight);
+
+  await user.save();
+  // const weights = await Weight.find().lean();
+  res.send(user.weights);
+});
+
+router.post('/create', async (req, res) => {
   // add validation joi here
   const { error } = validateUser(req.body);
   console.log(error);
