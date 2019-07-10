@@ -1,0 +1,25 @@
+/* .time {color: red; */
+/* margin-left: 1em} */
+
+.WeightLogDisplay {
+  display:flex;
+  flex-direction: column;
+  height: 30vh; 
+  overflow: auto;
+}
+.timeBlock {
+  color: orange;
+}
+.timeBlock, .weightBlock {
+  float:left;
+}
+.weightBlock {
+  font-size: 2em;
+  margin:0 0.5em 0 1em;
+}
+.weightAndTime {
+  margin: 0.5em 0 0.5em 0; 
+}
+.units {
+ font-size: 0.6em;
+}

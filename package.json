@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r esm index.js"
+    "start": "concurrently \"npm run frontend\" \"npm run backend\"",
+    "frontend": "npm start --prefix client/",
+    "backend": "nodemon -r esm index.js" 
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
+    "concurrently": "^4.1.1",
     "cors": "^2.8.5",
     "esm": "^3.2.25",
     "express": "^4.17.1",
