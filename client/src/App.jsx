@@ -30,7 +30,8 @@ class App extends React.Component {
     weight: "",
     weightLog: [],
     language: "",
-    displayUnit: ""
+    displayUnit: "",
+    error:""
   }
 
   login = {
@@ -53,7 +54,7 @@ class App extends React.Component {
             auth = res.data
             this.setState({ redirectToReferrer: true })
           }})
-        .catch(err => console.log('OMG',err))
+        .catch(err => this.setState({error: err.response.data}))
       event.preventDefault();
     }
   }
@@ -98,7 +99,7 @@ class App extends React.Component {
 
 
   render(){
-    const { name ,email,password, redirectToReferrer, language, displayUnit} = this.state;
+    const { name ,email,password, redirectToReferrer, language, displayUnit, error} = this.state;
     const  handleSubmit = this.login.handleSubmit;
     const handleChange = this.login.handleChange;
     return (
@@ -122,6 +123,7 @@ class App extends React.Component {
                   handleSubmit={handleSubmit}
                   handleChange={handleChange}
                   redirectToReferrer={redirectToReferrer}
+                  error={error}
                 />}
               />
               <Route

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run frontend\" \"npm run backend\"",
     "frontend": "npm start --prefix client/",
-    "backend": "nodemon -r esm index.js" 
+    "backend": "nodemon -r esm index.js"
   },
   "keywords": [],
   "author": "",

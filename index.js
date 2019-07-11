@@ -9,9 +9,10 @@ const auth = require('./routes/auth');
 const app = express();
 
 
-mongoose.connect('mongodb://localhost/weightlogger')
+// mongoose.connect('mongodb://localhost/weightlogger')
+mongoose.connect('mongodb://josepagan:qwerty12345@ds121349.mlab.com:21349/weightlogger')
   .then(() => { console.log('Connected to mongodb'); })
-  .catch(() => { console.error('Could not connect to mongodb'); });
+  .catch((err) => { console.error('Could not connect to mongodb', err); });
 
 
 app.use(cors());
