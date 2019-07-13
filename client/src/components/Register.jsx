@@ -11,12 +11,15 @@ const Register = ({
   displayUnit,
   handleSubmit,
   handleChange,
-  redirectToReferrer}) => {
+  redirectToReferrer,
+  error,
+}) => {
     if (redirectToReferrer === true) {
       return <Redirect to='/weightlogger' />
     }
     return (
       <div>
+        <h3 style={{"color":"red"}}>{error}</h3>
         <form onSubmit={handleSubmit}>
           <label>
             name

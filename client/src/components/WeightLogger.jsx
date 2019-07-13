@@ -7,7 +7,10 @@ import { auth } from '../App.jsx'
 class WeightLogger extends React.Component {
   componentDidMount(){
     if (auth)
-      axios.get('/api/users/weights', { headers: { 'x-auth-token': auth } })
+      axios.get('/api/users/weights', {
+        // withCredentials: true,
+        // headers: { 'x-auth-token': auth } 
+      })
         .then(res=>{
           // this.setState({weightLog:res.data})
           this.props.weightGetHandle(res.data)
@@ -40,16 +43,18 @@ const WeightLogDisplay = ({weightLog, unit})=>{
       const day = date.getDay(), month = date.getMonth(), year = date.getFullYear()
       const hours = date.getHours(), minutes = date.getMinutes();
 
-
-      return (<div className="weightAndTime">
-        <div className="weightBlock">
-          {weightObject.weight}<span className="units">{unit}s.</span>
-        </div>
-        <div className="timeBlock">
-          <span className="time">{day}/{month}/{year} - {hours}:{minutes}</span>
-          <div><TimeAgo datetime={weightObject.date} style={{color:"silver"}}/></div>
-        </div>
-      </div>)}) 
+      //todo return a component rather than big pile of divs
+      return (
+        <div className="weightAndTime">
+          <div className="weightBlock">
+            {weightObject.weight}<span className="units">{unit}s.</span>
+          </div>
+          <div className="timeBlock">
+            <span className="time">{day}/{month}/{year} - {hours}:{minutes}</span>
+            <div><TimeAgo datetime={weightObject.date} style={{color:"silver"}}/></div>
+          </div>
+        </div>)
+    }) 
   return <div className="WeightLogDisplay">{weightList}</div>
 }
 

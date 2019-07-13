@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const weight = require('./routes/weights');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
@@ -17,6 +18,7 @@ mongoose.connect('mongodb://josepagan:qwerty12345@ds121349.mlab.com:21349/weight
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api/weights', weight);
 app.use('/api/users', users);
 app.use('/api/auth', auth);

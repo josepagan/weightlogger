@@ -14,12 +14,6 @@ import Register from './components/Register'
 
 let auth=""
 
-class Protected extends React.Component {
-  render(){
-    return(<h3>Protected</h3>)
-  }
-}
-const Protected2 = ({colour}) => <h2>Protected {colour}</h2>
 
 class App extends React.Component {
   state = {
@@ -46,7 +40,12 @@ class App extends React.Component {
         .then(res => {console.log(res);
           if (res.status === 200) {
             console.log('200res', res)
-            axios.get('/api/users/me', { headers: { 'x-auth-token': res.data } })
+            axios.get('/api/users/me', {
+              withCredentials: true,
+              headers: { 
+                'x-auth-token': res.data 
+              }
+            })
               .then(res => {
                 const { name, language, displayUnit } = res.data
                 this.setState({name, language, displayUnit})
@@ -66,8 +65,8 @@ class App extends React.Component {
     submitHandle : (event) => {
       axios.post('/api/users/weights', {"weight":this.state.weight.toString()}, { headers: { 'x-auth-token': auth } })
         .then(res=>{
-          console.log('state',this.state)
-          this.setState({weightLog:res.data})}).catch(err => console.log('OMG', err))
+          this.setState({weightLog:res.data})})
+        .catch(err => this.setState({error: err.response.data}))
       event.preventDefault()
     },
     weightGetHandle : (res)=>{
@@ -92,11 +91,19 @@ class App extends React.Component {
             auth = res.data
             this.setState({ redirectToReferrer: true })
           }})
-        .catch(err => console.log('OMG', err))
+        // .catch(err => console.log('OMG', err))
+        .catch(err => this.setState({error: err.response.data}))
       event.preventDefault()
     }
   }
 
+  componentDidMount(){
+    axios.get('/api/users/me', {
+      withCredentials: true,
+    }
+    ).then(res => console.log(res))
+     .catch(err => console.log (err.response.data))
+  }
 
   render(){
     const { name ,email,password, redirectToReferrer, language, displayUnit, error} = this.state;
@@ -105,6 +112,7 @@ class App extends React.Component {
     return (
       <Router>
         <div>
+          <h3>{this.state.error}</h3>
           <Route render={(props) => <Navbar {...props} name={name}/>} />
           <PrivateRoute path="/weightlogger" 
             component={WeightLogger} 
@@ -114,33 +122,34 @@ class App extends React.Component {
             submitHandle={this.weightLogger.submitHandle}
             weightGetHandle={this.weightLogger.weightGetHandle}
           /> 
-          <Route
-            path="/login"
-            render={(props) => 
-                <Login {...props}
-                  email={email}
-                  password={password}
-                  handleSubmit={handleSubmit}
-                  handleChange={handleChange}
-                  redirectToReferrer={redirectToReferrer}
-                  error={error}
-                />}
-              />
               <Route
-                path="/register"
+                path="/login"
                 render={(props) => 
-                    <Register {...props}
+                    <Login {...props}
                       email={email}
                       password={password}
-                      handleSubmit={this.register.handleSubmit}
+                      handleSubmit={handleSubmit}
                       handleChange={handleChange}
                       redirectToReferrer={redirectToReferrer}
-                      language={language}
-                      displayUnit={displayUnit}
+                      error={error}
                     />}
-                  />
-                </div>
-              </Router>
+                      />
+                        <Route
+                          path="/register"
+                          render={(props) => 
+                              <Register {...props}
+                                email={email}
+                                password={password}
+                                handleSubmit={this.register.handleSubmit}
+                                handleChange={handleChange}
+                                redirectToReferrer={redirectToReferrer}
+                                language={language}
+                                displayUnit={displayUnit}
+                                error={error}
+                              />}
+                                />
+                                </div>
+                              </Router>
     )
   }
 }
@@ -154,4 +163,5 @@ const PrivateRoute = ({ component: Component,autho, ...rest }) => (
 
 const Navbar = ({name}) => <h2>Hello {(!auth) ? "stranger" : name}</h2>
 
-export { App, auth }
+
+  export { App, auth }

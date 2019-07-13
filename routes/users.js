@@ -70,16 +70,9 @@ router.post('/create', async (req, res) => {
   await newUser.save();
 
   const token = newUser.generateAuthToken();
+  // res.setHeader('Set-Cookie', ['type=ninja', 'language=javascript'])
   res.header('x-auth-token', token).send(_.pick(newUser, 'name', 'email', '_id'));
   res.send(`New user ${newUser.name} saved!`);
 });
-
-// router.put('/:id', async (req, res) => {
-//   const user = await User.findById(req.params.id);
-//   user.weights.push(new Weight({ weight: req.body.weight }));
-//   user.save();
-//   res.send(`this is ${user.name}`);
-// });
-
 
 module.exports = router;
