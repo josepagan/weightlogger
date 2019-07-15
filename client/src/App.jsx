@@ -12,7 +12,9 @@ import WeightLogger from './components/WeightLogger.jsx';
 import Login from './components/Login.jsx'
 import Register from './components/Register'
 
-let auth=""
+// global variable auth to indicate PrivateRoute whether 
+// it should render private components (weightlogger)
+let auth=false
 
 
 class App extends React.Component {
@@ -42,9 +44,11 @@ class App extends React.Component {
             console.log('200res', res)
             axios.get('/api/users/me', {
               withCredentials: true,
-              headers: { 
-                'x-auth-token': res.data 
-              }
+              // no need to include token in header since we are sending cookie
+              // (internet says its is safer)
+              // headers: { 
+              //   'x-auth-token': res.data 
+              // }
             })
               .then(res => {
                 const { name, language, displayUnit } = res.data
@@ -88,7 +92,8 @@ class App extends React.Component {
       // .then(res => console.log(res))
         .then(res => {console.log(res);
           if (res.status === 200) {
-            auth = res.data
+            // auth = res.data
+            auth = true 
             this.setState({ redirectToReferrer: true })
           }})
         // .catch(err => console.log('OMG', err))
@@ -97,12 +102,19 @@ class App extends React.Component {
     }
   }
 
+  //as soon as the component is loaded, try to autologin with browser cookie
   componentDidMount(){
     axios.get('/api/users/me', {
       withCredentials: true,
     }
-    ).then(res => console.log(res))
-     .catch(err => console.log (err.response.data))
+    )
+      .then(res => {
+        const { name, language, displayUnit } = res.data
+        this.setState({name, language, displayUnit})
+        auth = true 
+        this.setState({ redirectToReferrer: true })
+      })
+      .catch(err => console.log (err.response.data))
   }
 
   render(){
@@ -116,7 +128,6 @@ class App extends React.Component {
           <Route render={(props) => <Navbar {...props} name={name}/>} />
           <PrivateRoute path="/weightlogger" 
             component={WeightLogger} 
-            colour="red"
             weightLog={this.state.weightLog}
             changeHandle={this.weightLogger.changeHandle}
             submitHandle={this.weightLogger.submitHandle}
@@ -161,7 +172,9 @@ const PrivateRoute = ({ component: Component,autho, ...rest }) => (
   )} />
 )
 
-const Navbar = ({name}) => <h2>Hello {(!auth) ? "stranger" : name}</h2>
+const Navbar = ({name}) => <div>
+  <h2>Hello {(!auth) ? "stranger" : name}</h2>
+</div>
 
 
-  export { App, auth }
+export { App, auth }
